@@ -1,5 +1,6 @@
 package com.leaf.leetcode;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,6 +11,8 @@ import java.util.List;
 public class Lc1021 {
 
     public static void main(String[] args) {
+        Double d1 = null;
+        new BigDecimal(d1);
         System.out.println(new Lc1021().removeOuterParentheses("(()())(())"));
     }
 
