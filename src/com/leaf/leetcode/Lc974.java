@@ -1,5 +1,8 @@
 package com.leaf.leetcode;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * @author tongshujian
  * @date 2020/5/27
@@ -13,6 +16,18 @@ public class Lc974 {
 
 
     public int subarraysDivByK(int[] A, int K) {
+        Map<Integer, Integer> map = new HashMap<>();
+        int sum = 0;
+        for (int i = 0; i < A.length; i++) {
+            sum = (sum + A[i]) % K;
+            int num = map.getOrDefault(sum, 0);
+            map.put(sum, num + 1);
+        }
+        return map.getOrDefault(0,0);
+    }
+
+
+    public int subarraysDivByK2(int[] A, int K) {
         int resut = 0;
         int[] dp = new int[A.length];
         dp[0] = A[0] % K;

@@ -1,5 +1,7 @@
 package com.leaf.leetcode;
 
+import java.util.HashMap;
+
 /**
  * @author tongshujian
  * @date 2020/5/29
@@ -7,6 +9,8 @@ package com.leaf.leetcode;
 public class Lc198 {
 
     public int rob(int[] nums) {
+        HashMap map = new HashMap();
+
         if (nums.length == 0) {
             return 0;
         }
