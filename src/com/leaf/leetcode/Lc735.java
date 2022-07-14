@@ -1,7 +1,9 @@
 package com.leaf.leetcode;
 
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Deque;
+import java.util.List;
 
 /**
  * 给定一个整数数组 asteroids，表示在同一行的行星。
@@ -65,5 +67,90 @@ public class Lc735 {
             result[i] = stack.poll();
         }
         return result;
+    }
+
+    /**
+     * 安全区推导发 但是时间复杂度太高
+     * @param asteroids
+     * @return
+     */
+    public int[] asteroidCollision1(int[] asteroids) {
+        List<Integer> survival = new ArrayList<>();
+        List<List<Integer>> safeArea = new ArrayList<>();
+        //向左移動
+        for (int i = 0; i < asteroids.length; i++) {
+            int planet = asteroids[i];
+            if (planet > 0) {
+                continue;
+            }
+            List<Integer> safeNode = new ArrayList<>();
+            safeNode.add(i);
+            int j = i - 1;
+            for (; j >= 0; j--) {
+                //循环安全区
+                for (List<Integer> tempSafeNode : safeArea) {
+                    //安全区内
+                    if (tempSafeNode.size() == 2 && j >= tempSafeNode.get(1) && j <= tempSafeNode.get(0)) {
+                        //跳出安全区范围
+                        j = tempSafeNode.get(1) - 1;
+                        break;
+                    }
+                }
+                if (j >= 0 && asteroids[j] > 0 && Math.abs(asteroids[j]) == Math.abs(planet)) {
+                    safeNode.add(j);
+                    break;
+                } else if (j >= 0 && asteroids[j] > 0 && Math.abs(asteroids[j]) > Math.abs(planet)) {
+                    safeNode.add(j + 1);
+                    break;
+                }
+            }
+            if (j <= -1) {
+                survival.add(i);
+                //安全区变大了
+                safeNode.add(j);
+            }
+            safeArea.add(safeNode);
+        }
+        safeArea = new ArrayList<>();
+        //向右移动
+        for (int i = asteroids.length - 1; i >= 0; i--) {
+            int planet = asteroids[i];
+            if (planet < 0) {
+                continue;
+            }
+            List<Integer> safeNode = new ArrayList<>();
+            safeNode.add(i);
+            int j = i + 1;
+            for (; j < asteroids.length; j++) {
+                //循环安全区
+                for (List<Integer> tempSafeNode : safeArea) {
+                    //安全区内
+                    if (tempSafeNode.size() == 2 && j <= tempSafeNode.get(1) && j >= tempSafeNode.get(0)) {
+                        //跳出安全区范围
+                        j = tempSafeNode.get(1) + 1;
+                        break;
+                    }
+                }
+                if (j < asteroids.length && asteroids[j] < 0 && Math.abs(asteroids[j]) == Math.abs(planet)) {
+                    safeNode.add(j);
+                    break;
+                } else if (j < asteroids.length && asteroids[j] < 0 && Math.abs(asteroids[j]) > Math.abs(planet)) {
+                    safeNode.add(j - 1);
+                    break;
+                }
+            }
+            if (j >= asteroids.length) {
+                survival.add(i);
+                //安全区变大了
+                safeNode.add(j);
+            }
+            safeArea.add(safeNode);
+        }
+        survival.sort(Integer::compareTo);
+        int[] survivalArray = new int[survival.size()];
+        for (int i = 0; i < survivalArray.length; i++) {
+            survivalArray[i] = asteroids[survival.get(i)];
+        }
+        return survivalArray;
     }
 }
